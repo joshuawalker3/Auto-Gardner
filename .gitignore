@@ -1,6 +1,4 @@
 #STM32 Ignores
-Binaries/
-binaries/
 Debug/
 debug/
 
