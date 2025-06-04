@@ -57,6 +57,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define VALVE_CTL_Pin GPIO_PIN_3
+#define VALVE_CTL_GPIO_Port GPIOA
+#define FLOAT_LOW_Pin GPIO_PIN_5
+#define FLOAT_LOW_GPIO_Port GPIOB
+#define FLOAT_MID_Pin GPIO_PIN_6
+#define FLOAT_MID_GPIO_Port GPIOB
+#define FLOAT_HI_Pin GPIO_PIN_7
+#define FLOAT_HI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
