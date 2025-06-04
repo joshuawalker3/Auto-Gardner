@@ -3,5 +3,11 @@ Debug/
 debug/
 .settings/
 
+#ESP32
+Build/
+build/
+my_wifi.h
+*.old
+
 
 
