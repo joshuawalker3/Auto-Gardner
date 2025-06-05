@@ -50,6 +50,7 @@ Aht10_HandleTypeDef aht10;
 FloatSensor_HandleTypeDef hi_float_sensor;
 FloatSensor_HandleTypeDef mid_float_sensor;
 FloatSensor_HandleTypeDef low_float_sensor;
+SoilMoistSensor_HandleTypeDef soil_moisture_sensor;
 
 /* USER CODE END PV */
 
@@ -62,6 +63,7 @@ static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 HAL_StatusTypeDef Initialize_AHT10(void);
 HAL_StatusTypeDef Initialize_FloatSensors(void);
+HAL_StatusTypeDef Initialize_SoilMoistureSensor(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -114,6 +116,11 @@ int main(void)
 	  // Show error somehow
   }
 
+  status = Initialize_SoilMoistureSensor();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
 
   /* USER CODE END 2 */
 
@@ -385,6 +392,12 @@ HAL_StatusTypeDef Initialize_FloatSensors(void) {
 	}
 
 	status = float_sensor_init(&low_float_sensor, FLOAT_LOW_GPIO_Port, FLOAT_LOW_Pin);
+
+	return status;
+}
+
+HAL_StatusTypeDef Initialize_SoilMoistureSensor(void) {
+	HAL_StatusTypeDef status = soil_moisture_sensor_init(&soil_moisture_sensor, &hadc1);
 
 	return status;
 }
