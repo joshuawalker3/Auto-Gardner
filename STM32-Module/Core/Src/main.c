@@ -132,6 +132,12 @@ int main(void)
 	  // Show error somehow
   }
 
+  status = Initialize_Esp32Module();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
