@@ -47,6 +47,10 @@ SPI_HandleTypeDef hspi1;
 
 /* USER CODE BEGIN PV */
 Aht10_HandleTypeDef aht10;
+FloatSensor_HandleTypeDef hi_float_sensor;
+FloatSensor_HandleTypeDef mid_float_sensor;
+FloatSensor_HandleTypeDef low_float_sensor;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,7 +60,8 @@ static void MX_I2C1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-HAL_StatusTypedef Initialize_AHT10(void);
+HAL_StatusTypeDef Initialize_AHT10(void);
+HAL_StatusTypeDef Initialize_FloatSensors(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -72,7 +77,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	HAL_StatusTypedef status;
+	HAL_StatusTypeDef status;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,7 +102,13 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  status = InitializeAHT10();
+  status = Initialize_AHT10();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
+
+  status = Initialize_FloatSensors();
 
   if (status != HAL_OK) {
 	  // Show error somehow
@@ -356,6 +367,24 @@ HAL_StatusTypeDef Initialize_AHT10(void) {
 	}
 
 	status = aht10_init(&aht10, AHT10_POWER_GPIO_Port, AHT10_POWER_Pin, AHT10_DEFAULT_UNITS);
+
+	return status;
+}
+
+HAL_StatusTypeDef Initialize_FloatSensors(void) {
+	HAL_StatusTypeDef status = float_sensor_init(&hi_float_sensor, FLOAT_HI_GPIO_Port, FLOAT_HI_Pin);
+
+	if (status != HAL_OK) {
+		return status;
+	}
+
+	status = float_sensor_init(&mid_float_sensor, FLOAT_MID_GPIO_Port, FLOAT_MID_Pin);
+
+	if (status != HAL_OK) {
+		return status;
+	}
+
+	status = float_sensor_init(&low_float_sensor, FLOAT_LOW_GPIO_Port, FLOAT_LOW_Pin);
 
 	return status;
 }
