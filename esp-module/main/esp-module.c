@@ -1,27 +1,11 @@
-/* WiFi station Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
 #include "my_wifi_driver.h"
 #include "tcp_socket_driver.h"
 #include "stm32_spi_driver.h"
 
-//#include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-//#include "freertos/event_groups.h"
 #include "esp_system.h"
 #include "esp_log.h"
-
-//#include "esp_netif.h"
-//#include "esp_event.h"
-//#include "esp_wifi.h"
-//#include "nvs.h"
-//#include "nvs_flash.h"
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -36,9 +20,6 @@ static const char *TAG = "main";
 
 const uint32_t ON_CMD = 0x01;
 const uint32_t OFF_CMD = 0x02;
-
-#define HOST_IP "192.168.1.52"
-#define HOST_PORT 8000
 
 void socket_client_task(void *pvParameters)
 {
