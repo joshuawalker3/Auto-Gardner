@@ -74,6 +74,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define OS_MODE NO_RTOS
 #define AHT10_DEFAULT_UNITS IMPERIAL
+#define SOLENOID_DEFAULT_STATUS SOL_OFF
 
 /* USER CODE END Private defines */
 

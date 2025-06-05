@@ -51,6 +51,7 @@ FloatSensor_HandleTypeDef hi_float_sensor;
 FloatSensor_HandleTypeDef mid_float_sensor;
 FloatSensor_HandleTypeDef low_float_sensor;
 SoilMoistSensor_HandleTypeDef soil_moisture_sensor;
+Solenoid_HandleTypeDef water_valve;
 
 /* USER CODE END PV */
 
@@ -64,6 +65,7 @@ static void MX_SPI1_Init(void);
 HAL_StatusTypeDef Initialize_AHT10(void);
 HAL_StatusTypeDef Initialize_FloatSensors(void);
 HAL_StatusTypeDef Initialize_SoilMoistureSensor(void);
+HAL_StatusTypeDef Initialize_WaterValve(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -117,6 +119,12 @@ int main(void)
   }
 
   status = Initialize_SoilMoistureSensor();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
+
+  status = Initialize_WaterValve();
 
   if (status != HAL_OK) {
 	  // Show error somehow
@@ -398,6 +406,12 @@ HAL_StatusTypeDef Initialize_FloatSensors(void) {
 
 HAL_StatusTypeDef Initialize_SoilMoistureSensor(void) {
 	HAL_StatusTypeDef status = soil_moisture_sensor_init(&soil_moisture_sensor, &hadc1);
+
+	return status;
+}
+
+HAL_StatusTypeDef Initialize_WaterValve(void) {
+	HAL_StatusTypeDef status = solenoid_init(&water_valve, VALVE_CTL_GPIO_Port, VALVE_CTL_Pin, SOLENOID_DEFAULT_STATUS);
 
 	return status;
 }
