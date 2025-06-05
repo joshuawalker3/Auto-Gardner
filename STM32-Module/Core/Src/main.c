@@ -21,7 +21,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,7 +46,7 @@ I2C_HandleTypeDef hi2c1;
 SPI_HandleTypeDef hspi1;
 
 /* USER CODE BEGIN PV */
-
+Aht10_HandleTypeDef aht10;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +56,7 @@ static void MX_I2C1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void Initialize_AHT10(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -323,14 +322,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(VALVE_CTL_GPIO_Port, VALVE_CTL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, VALVE_CTL_Pin|AHT10_POWER_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : VALVE_CTL_Pin */
-  GPIO_InitStruct.Pin = VALVE_CTL_Pin;
+  /*Configure GPIO pins : VALVE_CTL_Pin AHT10_POWER_Pin */
+  GPIO_InitStruct.Pin = VALVE_CTL_Pin|AHT10_POWER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(VALVE_CTL_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : FLOAT_LOW_Pin FLOAT_MID_Pin FLOAT_HI_Pin */
   GPIO_InitStruct.Pin = FLOAT_LOW_Pin|FLOAT_MID_Pin|FLOAT_HI_Pin;
@@ -343,7 +342,9 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void Initialize_AHT10(void) {
 
+}
 /* USER CODE END 4 */
 
 /**
