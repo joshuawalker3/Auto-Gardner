@@ -56,7 +56,7 @@ static void MX_I2C1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-void Initialize_AHT10(void);
+HAL_StatusTypedef Initialize_AHT10(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -72,7 +72,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	HAL_StatusTypedef status;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,6 +97,12 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  status = InitializeAHT10();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
+
 
   /* USER CODE END 2 */
 
@@ -342,8 +348,16 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void Initialize_AHT10(void) {
+HAL_StatusTypeDef Initialize_AHT10(void) {
+	HAL_StatusTypedef status = aht10_open(&aht10, &hi2c1, OS_MODE);
 
+	if (status != HAL_OK) {
+		return status;
+	}
+
+	status = aht10_init(&aht10, AHT10_POWER_GPIO_Port, AHT10_POWER_Pin, AHT10_DEFAULT_UNITS);
+
+	return status;
 }
 /* USER CODE END 4 */
 
