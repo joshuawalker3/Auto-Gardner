@@ -31,7 +31,10 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "aht10.h"
+#include "float_sensor.h"
+#include "soil_moisture_sensor.h"
+#include "solenoid.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -67,6 +70,7 @@ void Error_Handler(void);
 #define FLOAT_HI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define OS_MODE NO_RTOS
 
 /* USER CODE END Private defines */
 
