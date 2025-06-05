@@ -52,6 +52,7 @@ FloatSensor_HandleTypeDef mid_float_sensor;
 FloatSensor_HandleTypeDef low_float_sensor;
 SoilMoistSensor_HandleTypeDef soil_moisture_sensor;
 Solenoid_HandleTypeDef water_valve;
+Esp32_SpiHandle esp32_module;
 
 /* USER CODE END PV */
 
@@ -66,6 +67,7 @@ HAL_StatusTypeDef Initialize_AHT10(void);
 HAL_StatusTypeDef Initialize_FloatSensors(void);
 HAL_StatusTypeDef Initialize_SoilMoistureSensor(void);
 HAL_StatusTypeDef Initialize_WaterValve(void);
+HAL_StatusTypeDef Initialize_Esp32Module(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -414,6 +416,10 @@ HAL_StatusTypeDef Initialize_WaterValve(void) {
 	HAL_StatusTypeDef status = solenoid_init(&water_valve, VALVE_CTL_GPIO_Port, VALVE_CTL_Pin, SOLENOID_DEFAULT_STATUS);
 
 	return status;
+}
+
+HAL_StatusTypeDef Initialize_Esp32Module(void) {
+	//HAL_StatusTypeDef status = init_esp32_spihandle(&esp32_module, &hspi1, )
 }
 /* USER CODE END 4 */
 

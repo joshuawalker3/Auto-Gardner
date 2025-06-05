@@ -35,6 +35,7 @@ extern "C" {
 #include "float_sensor.h"
 #include "soil_moisture_sensor.h"
 #include "solenoid.h"
+#include "esp32_spi_driver.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
