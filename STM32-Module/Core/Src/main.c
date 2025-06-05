@@ -375,7 +375,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 HAL_StatusTypeDef Initialize_AHT10(void) {
-	HAL_StatusTypedef status = aht10_open(&aht10, &hi2c1, OS_MODE);
+	HAL_StatusTypeDef status = aht10_open(&aht10, &hi2c1, OS_MODE);
 
 	if (status != HAL_OK) {
 		return status;
