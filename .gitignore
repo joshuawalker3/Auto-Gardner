@@ -7,6 +7,7 @@ debug/
 Build/
 build/
 my_wifi.h
+my_tcp_socket.h
 *.old
 
 
