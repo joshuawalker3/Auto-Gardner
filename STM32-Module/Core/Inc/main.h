@@ -63,6 +63,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define VALVE_CTL_Pin GPIO_PIN_3
 #define VALVE_CTL_GPIO_Port GPIOA
+#define SPI1_CS_Pin GPIO_PIN_5
+#define SPI1_CS_GPIO_Port GPIOA
+#define SPI1_CS_EXTI_IRQn EXTI9_5_IRQn
 #define AHT10_POWER_Pin GPIO_PIN_8
 #define AHT10_POWER_GPIO_Port GPIOA
 #define FLOAT_LOW_Pin GPIO_PIN_5

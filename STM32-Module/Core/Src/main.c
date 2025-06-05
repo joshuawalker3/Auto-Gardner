@@ -365,11 +365,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : SPI1_CS_Pin */
+  GPIO_InitStruct.Pin = SPI1_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SPI1_CS_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : FLOAT_LOW_Pin FLOAT_MID_Pin FLOAT_HI_Pin */
   GPIO_InitStruct.Pin = FLOAT_LOW_Pin|FLOAT_MID_Pin|FLOAT_HI_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -419,7 +429,13 @@ HAL_StatusTypeDef Initialize_WaterValve(void) {
 }
 
 HAL_StatusTypeDef Initialize_Esp32Module(void) {
-	//HAL_StatusTypeDef status = init_esp32_spihandle(&esp32_module, &hspi1, )
+	HAL_StatusTypeDef status = init_esp32_spihandle(&esp32_module, &hspi1, SPI1_CS_Pin);
+
+	return status;
+}
+
+HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	//
 }
 /* USER CODE END 4 */
 
