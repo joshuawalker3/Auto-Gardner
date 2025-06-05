@@ -7,13 +7,19 @@
 
 #include "esp32_spi_driver.h"
 
-void init_esp32_spihandle(Esp32_SpiHandle* handle, SPI_HandleTypeDef* spi_handle, uint16_t cs_pin) {
+HAL_StatusTypeDef init_esp32_spihandle(Esp32_SpiHandle* handle, SPI_HandleTypeDef* spi_handle, uint16_t cs_pin) {
+	if (!spi_handle) {
+		return HAL_ERROR;
+	}
+
 	handle->spi_handle = spi_handle;
 	handle->cs_pin = cs_pin;
 
 	handle->miso_buffer[0] = 0x00;
 
 	esp32_spi_send_data(handle, 1, 100);
+
+	return HAL_OK;
 }
 
 HAL_StatusTypeDef esp32_spi_read_cmd(Esp32_SpiHandle* handle, uint32_t timeout) {
