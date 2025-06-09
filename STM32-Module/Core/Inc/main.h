@@ -37,6 +37,8 @@ extern "C" {
 #include "solenoid.h"
 #include "esp32_spi_driver.h"
 #include "cmsis_os.h"
+
+#include "sensor_tasks.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -82,6 +84,11 @@ void Error_Handler(void);
 #define OS_MODE NO_RTOS
 #define AHT10_DEFAULT_UNITS IMPERIAL
 #define SOLENOID_DEFAULT_STATUS SOL_OFF
+#define DEFAULT_TEMP 40
+#define DEFAULT_HUMIDITY 40
+#define DEFAULT_SOIL_STATUS DRY
+#define DEFAULT_WATER_LEVEL EMPTY
+#define DEFAULT_SYS_FLAGS 0x00
 
 /* USER CODE END Private defines */
 

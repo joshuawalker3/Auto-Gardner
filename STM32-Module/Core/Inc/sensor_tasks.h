@@ -16,9 +16,6 @@
 #define ENV_DATA_TASK_STACK_NUM 4
 #define LEVEL_DATA_TASK_STACK_NUM 4
 
-osThreadId_t envDataTaskHandle;
-osThreadId_t levelDataTaskHandle;
-
 typedef struct {
 	Aht10_HandleTypeDef* aht10;
 	SoilMoistSensor_HandleTypeDef* soil_moisture_sensor;
@@ -68,11 +65,11 @@ HAL_StatusTypeDef sensor_tasks_init(Sensors_HandleTypeDef* sensors,
 
 
 
-static void sensor_tasks_get_env_data(void* env_sensors_args);
+void sensor_tasks_get_env_data(void* env_sensors_args);
 
-static void sensor_tasks_get_level_data(void* float_sensors_args);
+void sensor_tasks_get_level_data(void* float_sensors_args);
 
-static void sensor_tasks_get_all_data(void* sensors);
+void sensor_tasks_get_all_data(void* sensors_args);
 
 
 #endif /* INC_SENSOR_TASKS_H_ */

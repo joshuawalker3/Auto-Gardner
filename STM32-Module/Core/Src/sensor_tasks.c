@@ -6,6 +6,9 @@
  */
 #include "sensor_tasks.h"
 
+osThreadId_t envDataTaskHandle;
+osThreadId_t levelDataTaskHandle;
+
 const osThreadAttr_t envDataTask_attributes = {
   .name = "envDataTask",
   .stack_size = DEFAULT_STACK_SIZE * ENV_DATA_TASK_STACK_NUM,
@@ -66,7 +69,7 @@ HAL_StatusTypeDef sensor_tasks_init(Sensors_HandleTypeDef* sensors,
 	return HAL_OK;
 }
 
-static void sensor_tasks_get_env_data(void* env_sensors_args) {
+void sensor_tasks_get_env_data(void* env_sensors_args) {
 	Sensors_HandleTypeDef* sensors = (Sensors_HandleTypeDef*)env_sensors_args;
 
 	HAL_StatusTypeDef status = aht10_read(sensors->env_sensors->aht10, &sensors->data->temp, &sensors->data->humidity);
@@ -82,7 +85,7 @@ static void sensor_tasks_get_env_data(void* env_sensors_args) {
 	osThreadExit();
 }
 
-static void sensor_tasks_get_level_data(void* float_sensors_args) {
+void sensor_tasks_get_level_data(void* float_sensors_args) {
 	Sensors_HandleTypeDef* sensors = (Sensors_HandleTypeDef*)float_sensors_args;
 
 	uint8_t level = (float_sensor_status(sensors->float_sensors->hi_float_sensor) << 3) &
@@ -109,7 +112,7 @@ static void sensor_tasks_get_level_data(void* float_sensors_args) {
 	osThreadExit();
 }
 
-static void sensor_tasks_get_all_data(void* sensors_args) {
+void sensor_tasks_get_all_data(void* sensors_args) {
 	Sensors_HandleTypeDef* sensors = (Sensors_HandleTypeDef*)sensors_args;
 
 	envDataTaskHandle = osThreadNew(sensor_tasks_get_env_data, (void*)sensors, &envDataTask_attributes);

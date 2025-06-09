@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,7 +61,11 @@ FloatSensor_HandleTypeDef low_float_sensor;
 SoilMoistSensor_HandleTypeDef soil_moisture_sensor;
 Solenoid_HandleTypeDef water_valve;
 Esp32_SpiHandle esp32_module;
-
+EnvSensors_HandleTypeDef env_sensors;
+FloatSensors_HandleTypeDef float_sensors;
+Data_HandleTypeDef sensor_data;
+Sensors_HandleTypeDef sensors;
+uint8_t sys_flags = DEFAULT_SYS_FLAGS;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,6 +82,7 @@ HAL_StatusTypeDef Initialize_FloatSensors(void);
 HAL_StatusTypeDef Initialize_SoilMoistureSensor(void);
 HAL_StatusTypeDef Initialize_WaterValve(void);
 HAL_StatusTypeDef Initialize_Esp32Module(void);
+HAL_StatusTypeDef Initialize_SensorTasks(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -136,6 +142,12 @@ int main(void)
   }
 
   status = Initialize_WaterValve();
+
+  if (status != HAL_OK) {
+	  // Show error somehow
+  }
+
+  status = Initialize_SensorTasks();
 
   if (status != HAL_OK) {
 	  // Show error somehow
@@ -481,6 +493,29 @@ HAL_StatusTypeDef Initialize_WaterValve(void) {
 
 HAL_StatusTypeDef Initialize_Esp32Module(void) {
 	HAL_StatusTypeDef status = init_esp32_spihandle(&esp32_module, &hspi1, SPI1_CS_Pin);
+
+	return status;
+}
+
+HAL_StatusTypeDef Initialize_SensorTasks(void) {
+	HAL_StatusTypeDef status = sensor_tasks_init_i2c_Sensors(&env_sensors, &aht10, &soil_moisture_sensor);
+
+	if (status != HAL_OK) {
+		return status;
+	}
+
+	status = sensor_tasks_init_float_sensors(&float_sensors, &hi_float_sensor, &mid_float_sensor, &low_float_sensor);
+
+	if (status != HAL_OK) {
+		return status;
+	}
+
+	sensor_data.temp = DEFAULT_TEMP;
+	sensor_data.humidity = DEFAULT_HUMIDITY;
+	sensor_data.soil_status = DEFAULT_SOIL_STATUS;
+	sensor_data.water_level = DEFAULT_WATER_LEVEL;
+
+	status = sensor_tasks_init(&sensors, &sys_flags, &env_sensors, &float_sensors, &sensor_data);
 
 	return status;
 }
