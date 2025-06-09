@@ -9,6 +9,10 @@
 #define INC_SENSOR_TASKS_H_
 
 #include "main.h"
+#include "cmsis_os.h"
+#include "aht10.h"
+#include "float_sensor.h"
+#include "soil_moisture_sensor.h"
 
 #define TEMP_HUMID_FLAG (1 << 0)
 #define LEVEL_FLAG (1 << 1)

@@ -11,13 +11,13 @@ osThreadId_t levelDataTaskHandle;
 
 const osThreadAttr_t envDataTask_attributes = {
   .name = "envDataTask",
-  .stack_size = DEFAULT_STACK_SIZE * ENV_DATA_TASK_STACK_NUM,
+  .stack_size = configMINIMAL_STACK_SIZE * ENV_DATA_TASK_STACK_NUM,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
 const osThreadAttr_t levelDataTask_attributes = {
   .name = "levelDataTask",
-  .stack_size = DEFAULT_STACK_SIZE * LEVEL_DATA_TASK_STACK_NUM,
+  .stack_size = configMINIMAL_STACK_SIZE * LEVEL_DATA_TASK_STACK_NUM,
   .priority = (osPriority_t) osPriorityNormal,
 };
 

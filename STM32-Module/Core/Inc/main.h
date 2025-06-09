@@ -31,14 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "aht10.h"
-#include "float_sensor.h"
-#include "soil_moisture_sensor.h"
-#include "solenoid.h"
-#include "esp32_spi_driver.h"
-#include "cmsis_os.h"
 
-#include "sensor_tasks.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -79,16 +72,6 @@ void Error_Handler(void);
 #define FLOAT_HI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define DEFAULT_STACK_SIZE configMINIMAL_STACK_SIZE
-
-#define OS_MODE NO_RTOS
-#define AHT10_DEFAULT_UNITS IMPERIAL
-#define SOLENOID_DEFAULT_STATUS SOL_OFF
-#define DEFAULT_TEMP 40
-#define DEFAULT_HUMIDITY 40
-#define DEFAULT_SOIL_STATUS DRY
-#define DEFAULT_WATER_LEVEL EMPTY
-#define DEFAULT_SYS_FLAGS 0x00
 
 /* USER CODE END Private defines */
 
