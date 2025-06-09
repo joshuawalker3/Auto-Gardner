@@ -31,10 +31,10 @@ typedef struct {
 } FloatSensors_HandleTypeDef;
 
 typedef enum {
-	FULL = 0x06,
-	OK = 0x02,
-	LOW = 0x00,
-	EMPTY = 0x01
+	FULL,
+	MID,
+	LOW,
+	EMPTY
 } WaterLevel_Enum;
 
 typedef struct {

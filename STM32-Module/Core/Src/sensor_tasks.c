@@ -82,7 +82,32 @@ static void sensor_tasks_get_env_data(void* env_sensors_args) {
 	osThreadExit();
 }
 
-static void sensor_tasks_get_level_data(void* float_sensors_args);
+static void sensor_tasks_get_level_data(void* float_sensors_args) {
+	Sensors_HandleTypeDef* sensors = (Sensors_HandleTypeDef*)sensors_args;
+
+	uint8_t level = (float_sensor_status(sensors->float_sensors->hi_float_sensor) << 3) &
+			(float_sensor_status(sensors->float_sensors->mid_float_sensor) << 2) &
+			(float_sensor_status(sensors->float_sensors->low_float_sensor) << 1);
+
+	switch (level) {
+		case 0b110:
+			sensors->data->water_level = FULL;
+			break;
+		case 0b010:
+			sensors->data->water_level = MID;
+			break;
+		case 0b000:
+			sensors->data->water_level = LOW;
+			break;
+		default:
+			sensors->data->water_level = EMPTY;
+			break;
+	}
+
+	&(sensors->sys_flags) |= LEVEL_FLAG;
+
+	osThreadExit();
+}
 
 static void sensor_tasks_get_all_data(void* sensors_args) {
 	Sensors_HandleTypeDef* sensors = (Sensors_HandleTypeDef*)sensors_args;
