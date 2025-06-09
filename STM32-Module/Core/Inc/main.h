@@ -76,6 +76,8 @@ void Error_Handler(void);
 #define FLOAT_HI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define DEFAULT_STACK_SIZE configMINIMAL_STACK_SIZE
+
 #define OS_MODE NO_RTOS
 #define AHT10_DEFAULT_UNITS IMPERIAL
 #define SOLENOID_DEFAULT_STATUS SOL_OFF
