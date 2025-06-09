@@ -36,6 +36,7 @@ extern "C" {
 #include "soil_moisture_sensor.h"
 #include "solenoid.h"
 #include "esp32_spi_driver.h"
+#include "cmsis_os.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
