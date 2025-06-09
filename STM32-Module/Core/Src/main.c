@@ -99,7 +99,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  HAL_StatusTypeDef status;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -124,39 +123,27 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  status = Initialize_AHT10();
-
-  if (status != HAL_OK) {
+  if (Initialize_AHT10() != HAL_OK) {
 	  // Show error somehow
   }
 
-  status = Initialize_FloatSensors();
-
-  if (status != HAL_OK) {
+  if (Initialize_FloatSensors() != HAL_OK) {
 	  // Show error somehow
   }
 
-  status = Initialize_SoilMoistureSensor();
-
-  if (status != HAL_OK) {
+  if (Initialize_SoilMoistureSensor() != HAL_OK) {
 	  // Show error somehow
   }
 
-  status = Initialize_WaterValve();
-
-  if (status != HAL_OK) {
+  if (Initialize_WaterValve() != HAL_OK) {
 	  // Show error somehow
   }
 
-  status = Initialize_SensorTasks();
-
-  if (status != HAL_OK) {
+  if (Initialize_SensorTasks() != HAL_OK) {
 	  // Show error somehow
   }
 
-  status = Initialize_Esp32Module();
-
-  if (status != HAL_OK) {
+  if (Initialize_Esp32Module() != HAL_OK) {
 	  // Show error somehow
   }
 
