@@ -1,5 +1,5 @@
-#ifndef COMMUNICATION_TASKS_
-#define COMMUNICATION_TASKS_
+#ifndef CLIENT_COMMUNICATION_TASKS_
+#define CLIENT_COMMUNICATION_TASKS_
 
 #include "sys/socket.h"
 #include "cJSON.h"
