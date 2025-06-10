@@ -5,8 +5,10 @@
 #include "cJSON.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 #include "esp_log.h"
 #include "tcp_socket_driver.h"
+#include "client_spi_queue.h"
 
 void client_communication_tasks_client_socket_task(void* args);
 

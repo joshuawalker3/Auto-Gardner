@@ -3,6 +3,8 @@
 static const char *TAG = "communications_tasks";
 
 void client_communication_tasks_client_socket_task(void* args) {
+    QueueHandle_t* comm_queue = (QueueHandle_t*) args;
+
 	char rx_buffer[1024];
 
     int sock = tcp_create_and_connect(HOST_IP, HOST_PORT);
