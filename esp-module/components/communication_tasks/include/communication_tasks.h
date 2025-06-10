@@ -2,7 +2,6 @@
 #define COMMUNICATION_TASKS_
 
 #include "sys/socket.h"
-#include "netdb.h"
 #include "cJSON.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
