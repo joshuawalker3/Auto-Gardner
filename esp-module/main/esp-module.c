@@ -15,7 +15,7 @@ void app_main()
 {
     ESP_LOGI(TAG, "Beginning initializations...");
 
-    initialize_nvs_flash();
+    wifi_initialize_nvs_flash();
 
     minimal_spi_init();
 

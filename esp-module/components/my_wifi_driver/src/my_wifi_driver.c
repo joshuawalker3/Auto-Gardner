@@ -6,7 +6,7 @@ static int s_retry_num = 0;
 
 static const char* TAG = "my_wifi_driver";
 
-void initialize_nvs_flash() {
+void wifi_initialize_nvs_flash() {
 	esp_err_t status = nvs_flash_init();
 
 	if (status == ESP_ERR_NVS_NO_FREE_PAGES || status == ESP_ERR_NVS_NEW_VERSION_FOUND) {
