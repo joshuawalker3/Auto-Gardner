@@ -17,7 +17,7 @@ void app_main()
 
     wifi_initialize_nvs_flash();
 
-    minimal_spi_init();
+    spi_minimal_spi_init();
 
     wifi_init_station();
 

@@ -5,14 +5,14 @@
 
 #define SLAVE_CS_PIN GPIO_NUM_15
 
-void minimal_spi_init(void);
+void spi_minimal_spi_init(void);
 
-void select_slave(gpio_num_t slave_cs);
+void spi_select_slave(gpio_num_t slave_cs);
 
-void unselect_slave(gpio_num_t slave_cs);
+void spi_unselect_slave(gpio_num_t slave_cs);
 
-esp_err_t master_transmit(uint8_t* command);
+esp_err_t spi_master_transmit(uint8_t* command);
 
-esp_err_t master_read(uint8_t* data, uint16_t size);
+esp_err_t spi_master_read(uint8_t* data, uint16_t size);
 
 #endif

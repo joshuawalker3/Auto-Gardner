@@ -5,7 +5,7 @@
 
 static const char* TAG = "stm32_spi_driver";
 
-void minimal_spi_init(void) {
+void spi_minimal_spi_init(void) {
     ESP_LOGI(TAG, "Begin SPI init...");
 
     spi_config_t spi_config = {
@@ -24,15 +24,15 @@ void minimal_spi_init(void) {
     }
 }
 
-void select_slave(gpio_num_t slave_cs) {
+void spi_select_slave(gpio_num_t slave_cs) {
     gpio_set_level(slave_cs, 0);
 }
 
-void unselect_slave(gpio_num_t slave_cs) {
+void spi_unselect_slave(gpio_num_t slave_cs) {
     gpio_set_level(slave_cs, 1);
 }
 
-esp_err_t master_transmit(uint8_t* command) {
+esp_err_t spi_master_transmit(uint8_t* command) {
     spi_trans_t trans = {0};
 
     trans.cmd = NULL;
@@ -46,7 +46,7 @@ esp_err_t master_transmit(uint8_t* command) {
     return spi_trans(HSPI_HOST, &trans);
 }
 
-esp_err_t master_read(uint8_t* data, uint16_t size) {
+esp_err_t spi_master_read(uint8_t* data, uint16_t size) {
     spi_trans_t trans = {0};
 
     trans.cmd = NULL;
