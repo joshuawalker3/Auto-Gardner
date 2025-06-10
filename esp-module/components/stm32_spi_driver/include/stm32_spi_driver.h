@@ -2,6 +2,8 @@
 #define STM32_SPI_DRIVER_
 
 #include "driver/gpio.h"
+#include "esp_log.h"
+#include "driver/spi.h"
 
 #define SLAVE_CS_PIN GPIO_NUM_15
 

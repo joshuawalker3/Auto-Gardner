@@ -1,8 +1,5 @@
 #include "stm32_spi_driver.h"
 
-#include "driver/spi.h"
-#include "esp_log.h"
-
 static const char* TAG = "stm32_spi_driver";
 
 void spi_minimal_spi_init(void) {
