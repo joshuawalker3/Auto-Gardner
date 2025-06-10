@@ -18,9 +18,6 @@
 
 static const char *TAG = "main";
 
-const uint32_t ON_CMD = 0x01;
-const uint32_t OFF_CMD = 0x02;
-
 void socket_client_task(void *pvParameters)
 {
     char rx_buffer[1024];

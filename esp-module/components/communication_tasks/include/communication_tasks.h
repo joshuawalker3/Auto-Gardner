@@ -1,0 +1,4 @@
+#ifndef COMMUNICATION_TASKS_
+#define COMMUNICATION_TASKS_
+
+#endif
