@@ -1,0 +1,4 @@
+#ifndef SPI_COMMUNICATION_TASKS_
+#define SPI_COMMUNICATION_TASKS_
+
+#endif
