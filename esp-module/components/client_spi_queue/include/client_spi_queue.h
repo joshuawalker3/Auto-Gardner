@@ -2,27 +2,28 @@
 #define CLIENT_SPI_QUEUE_
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 
 #define CLIENT_SPI_QUEUE_LENGTH 5
 #define MS_TO_WAIT 200
 #define TICKS_TO_WAIT (MS_TO_WAIT / portTICK_PERIOD_MS)
 
 typedef enum {
-	SATURATED,
-	OK,
-	DRY
+	SOIL_SATURATED,
+	SOIL_OK,
+	SOIL_DRY
 } Soil_Status;
 
 typedef enum {
-	FULL,
-	MID,
-	LOW,
-	EMPTY
+	WATER_FULL,
+	WATER_MID,
+	WATER_LOW,
+	WATER_EMPTY
 } Water_Level;
 
 typedef enum {
-	CLOSED,
-	OPEN
+	VALVE_CLOSED,
+	VALVE_OPEN
 } Valve_Status;
 
 typedef struct {
