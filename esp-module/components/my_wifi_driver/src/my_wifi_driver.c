@@ -1,14 +1,5 @@
 #include "my_wifi_driver.h"
 
-#include "esp_log.h"
-#include <string.h>
-#include "esp_netif.h"
-#include "freertos/event_groups.h"
-#include "esp_event.h"
-#include "esp_wifi.h"
-#include "nvs.h"
-#include "nvs_flash.h"
-
 static EventGroupHandle_t s_wifi_event_group;
 
 static int s_retry_num = 0;
