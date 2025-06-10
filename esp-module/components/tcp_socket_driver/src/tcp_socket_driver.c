@@ -1,9 +1,5 @@
 #include "tcp_socket_driver.h"
 
-#include "sys/socket.h"
-#include "netdb.h"
-#include "esp_log.h"
-
 static const char* TAG = "tcp_socket_driver";
 
 int tcp_create_and_connect(char* host_ip, int port) {
