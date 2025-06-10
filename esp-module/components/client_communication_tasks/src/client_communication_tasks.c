@@ -1,8 +1,8 @@
-#include "communication_tasks.h"
+#include "client_communication_tasks.h"
 
 static const char *TAG = "communications_tasks";
 
-void communication_tasks_socket_client_task(void* args) {
+void client_communication_tasks_client_socket_task(void* args) {
 	char rx_buffer[1024];
 
     int sock = tcp_create_and_connect(HOST_IP, HOST_PORT);

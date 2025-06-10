@@ -1,7 +1,7 @@
 #include "my_wifi_driver.h"
 #include "tcp_socket_driver.h"
 #include "stm32_spi_driver.h"
-#include "communication_tasks.h"
+#include "client_communication_tasks.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -23,7 +23,7 @@ void app_main()
 
     ESP_LOGI(TAG, "Finish initialization, adding tasks....");
 
-    xTaskCreate(communication_tasks_socket_client_task, "client_socket", 16384, NULL, 5, NULL);
+    xTaskCreate(client_communication_tasks_client_socket_task, "client_socket", 16384, NULL, 5, NULL);
 
     ESP_LOGI(TAG, "Tasks added, returning from app_main....");
 }

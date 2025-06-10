@@ -8,6 +8,6 @@
 #include "esp_log.h"
 #include "tcp_socket_driver.h"
 
-void communication_tasks_socket_client_task(void* args);
+void client_communication_tasks_client_socket_task(void* args);
 
 #endif
