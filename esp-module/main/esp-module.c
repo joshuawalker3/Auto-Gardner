@@ -5,15 +5,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_system.h"
 #include "esp_log.h"
-
-#include "lwip/err.h"
-#include "lwip/sys.h"
-
-//#include "sys/socket.h"
-//#include "netdb.h"
-//#include "cJSON.h"
 #include "driver/spi.h"
 #include "driver/gpio.h"
 
@@ -21,11 +13,17 @@ static const char *TAG = "main";
 
 void app_main()
 {
+    ESP_LOGI(TAG, "Beginning initializations...");
+
     initialize_nvs_flash();
 
     minimal_spi_init();
 
     wifi_init_station();
 
+    ESP_LOGI(TAG, "Finish initialization, adding tasks....");
+
     xTaskCreate(communication_tasks_socket_client_task, "client_socket", 16384, NULL, 5, NULL);
+
+    ESP_LOGI(TAG, "Tasks added, returning from app_main....");
 }
