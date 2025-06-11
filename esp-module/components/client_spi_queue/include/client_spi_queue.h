@@ -8,6 +8,17 @@
 #define MS_TO_WAIT 200
 #define TICKS_TO_WAIT (MS_TO_WAIT / portTICK_PERIOD_MS)
 
+//commands
+#define GET_ALL_DATA 0x01
+#define GET_ENV_DATA 0x02
+#define GET_SOIL_DATA 0x03
+#define GET_VALVE_STATUS 0x04
+#define GET_WATER_LEVEL 0x05
+#define GET_WATERING_STATUS 0x06
+#define START_WATERING 0x07
+#define STOP_WATERING 0x08
+#define STM32_ERROR 0x09
+
 typedef enum {
 	SOIL_SATURATED,
 	SOIL_OK,

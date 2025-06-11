@@ -21,18 +21,6 @@
 #define TRANSMISSION_SUCCESS 0x01
 #define TRANSMISSION_ERROR 0x00
 
-
-//commands
-#define GET_ALL_DATA 0x01
-#define GET_ENV_DATA 0x02
-#define GET_SOIL_DATA 0x03
-#define GET_VALVE_STATUS 0x04
-#define GET_WATER_LEVEL 0x05
-#define GET_WATERING_STATUS 0x06
-#define START_WATERING 0x07
-#define STOP_WATERING 0x08
-#define STM32_ERROR 0x09
-
 void client_communication_tasks_client_socket_task(void* args);
 
 void add_temp(uint32_t comm_word, int16_t temp);
