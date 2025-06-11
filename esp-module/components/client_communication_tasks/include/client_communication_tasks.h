@@ -31,6 +31,7 @@
 #define GET_WATERING_STATUS 0x06
 #define START_WATERING 0x07
 #define STOP_WATERING 0x08
+#define STM32_ERROR 0x09
 
 void client_communication_tasks_client_socket_task(void* args);
 

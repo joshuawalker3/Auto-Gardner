@@ -52,12 +52,40 @@ void client_communication_tasks_client_socket_task(void* args) {
         uint32_t comm_word = 0x00000000;
 
         switch (cmd) {
-            case 0x01:
+            case GET_ALL_DATA:
                 add_temp(comm_word, msg_in.temperature);
                 add_humidity(comm_word, msg_in.humidity);
                 add_soil_status(comm_word, msg_in.soil_status);
                 add_water_level(comm_word, msg_in.water_level);
                 add_valve_status(comm_word, msg_in.valve_status);
+                break;
+            case GET_ENV_DATA:
+                add_temp(comm_word, msg_in.temperature);
+                add_humidity(comm_word, msg_in.humidity);
+                break;
+            case GET_SOIL_DATA:
+                add_soil_status(comm_word, msg_in.soil_status);
+                break;
+            case GET_VALVE_STATUS:
+                add_valve_status(comm_word, msg_in.valve_status);
+                break;
+            case GET_WATER_LEVEL:
+                add_water_level(comm_word, msg_in.water_level);
+                break;
+            case GET_WATERING_STATUS:
+                add_water_level(comm_word, msg_in.water_level);
+                add_valve_status(comm_word, msg_in.valve_status);
+                break;
+            case START_WATERING:
+                add_water_level(comm_word, msg_in.water_level);
+                add_valve_status(comm_word, msg_in.valve_status);
+                break;
+            case STOP_WATERING:
+                add_water_level(comm_word, msg_in.water_level);
+                add_valve_status(comm_word, msg_in.valve_status);
+                break;
+            case STM32_ERROR:
+                success_bit = TRANSMISSION_ERROR;
                 break;
             default:
                 success_bit = TRANSMISSION_ERROR;
