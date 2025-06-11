@@ -5,8 +5,6 @@ static const char *TAG = "communications_tasks";
 void client_communication_tasks_client_socket_task(void* args) {
     QueueHandle_t* comm_queue = (QueueHandle_t*) args;
 
-	char rx_buffer[1024];
-
     int sock = tcp_create_and_connect(HOST_IP, HOST_PORT);
 
     if (sock < 0) {
@@ -14,7 +12,11 @@ void client_communication_tasks_client_socket_task(void* args) {
     }
 
     while (true) {
-        int len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
+        char cmd_buffer[4];
+
+        uint8_t cmd;
+
+        int len = recv(sock, cmd_buffer, sizeof(cmd_buffer) - 1, 0);
 
         if (len < 0) {
             ESP_LOGE(TAG, "recv failed: errno %d", errno);
@@ -22,22 +24,15 @@ void client_communication_tasks_client_socket_task(void* args) {
             break;
         }
 
-        rx_buffer[len] = '\0';
+        cmd_buffer[len] = '\0';
 
-        ESP_LOGI(TAG, "Received: %s", rx_buffer);
+        ESP_LOGI(TAG, "Received: %s", cmd_buffer);
 
-        cJSON* received = cJSON_Parse(rx_buffer);
-
-        uint8_t cmd = (uint8_t)(cJSON_GetObjectItem(received, "CMD")->valueint);
+        cmd = (uint8_t)atoi(cmd_buffer);
 
         ESP_LOGI(TAG, "Received cmd %d", cmd);
 
-        cJSON_Delete(received);
-
-        esp_err_t err;
-
-        uint8_t success = 0x01;
-        char success_bit[2];
+        uint8_t success_bit = TRANSMISSION_SUCCESS;
 
         Client_Spi_Message msg_out;
         Client_Spi_Message msg_in;
@@ -49,37 +44,34 @@ void client_communication_tasks_client_socket_task(void* args) {
         vTaskDelay(10 / portTICK_PERIOD_MS);
 
         while (!client_spi_queue_size(*comm_queue)) {
-            vTaskDelay(10 / portTICK_PERIOD_MS);
+            vTaskDelay(5 / portTICK_PERIOD_MS);
         }
 
         client_spi_queue_dequeue(*comm_queue, &msg_in);
 
-        cJSON* root = cJSON_CreateObject();
+        uint32_t comm_word = 0x00000000;
 
         switch (cmd) {
             case 0x01:
-                add_temp(root, msg_in.temperature);
-                add_humidity(root, msg_in.humidity);
-                add_soil_status(root, msg_in.soil_status);
-                add_water_level(root, msg_in.water_level);
-                add_valve_status(root, msg_in.valve_status);
+                add_temp(comm_word, msg_in.temperature);
+                add_humidity(comm_word, msg_in.humidity);
+                add_soil_status(comm_word, msg_in.soil_status);
+                add_water_level(comm_word, msg_in.water_level);
+                add_valve_status(comm_word, msg_in.valve_status);
                 break;
             default:
-                success = 0x00;
+                success_bit = TRANSMISSION_ERROR;
                 break;
         }
 
-        snprintf(success_bit, sizeof(success_bit), "%u", success);
+        add_success_bit(comm_word, success_bit);
 
-        cJSON_AddStringToObject(root, "SUCCESS", success_bit);
+        char payload[33];
 
-        char* payload = cJSON_PrintUnformatted(root);
+        snprintf(payload, sizeof(payload), "%u", comm_word);
 
         ESP_LOGI(TAG, "Sending %s", payload);
         send(sock, payload, strlen(payload), 0);
-
-        cJSON_free(payload);
-        cJSON_Delete(root);
     }
 
     shutdown(sock, 0);
@@ -87,81 +79,65 @@ void client_communication_tasks_client_socket_task(void* args) {
     vTaskDelete(NULL);
 }
 
-void add_temp(cJSON* root, int16_t temp) {
-    char temp_str[7];
-
-    snprintf(temp_str, sizeof(temp_str), "%i", temp);
-
-    cJSON_AddStringToObject(root, "TEMPERATURE", temp_str);
+void add_temp(uint32_t comm_word, int16_t temp) {
+    comm_word |= temp;
 }
 
-void add_humidity(cJSON* root, uint8_t humidity) {
-    char humid_str[4];
-
-    snprintf(humid_str, sizeof(humid_str), "%u", humidity);
-
-    cJSON_AddStringToObject(root, "HUMIDITY", humid_str);
+void add_humidity(uint32_t comm_word, uint8_t humidity) {
+    comm_word |= (((uint32_t)humidity) << HUMIDITY_BIT_SHIFT);
 }
 
-void add_soil_status(cJSON* root, Soil_Status soil_status) {
-    char* soil_status_str;
-
+void add_soil_status(uint32_t comm_word, Soil_Status soil_status) {
     switch (soil_status) {
         case SOIL_SATURATED:
-            soil_status_str = "SOIL_SATURATED";
+            comm_word |= (((uint32_t)SOIL_SATURATED) << SOIL_STATUS_BIT_SHIFT);
             break;
         case SOIL_OK:
-            soil_status_str = "SOIL_OK";
+            comm_word |= (((uint32_t)SOIL_OK) << SOIL_STATUS_BIT_SHIFT);
             break;
         case SOIL_DRY:
-            soil_status_str = "SOIL_DRY";
+            comm_word |= (((uint32_t)SOIL_DRY) << SOIL_STATUS_BIT_SHIFT);
             break;
         default:
-            soil_status_str = "ERROR";
+            comm_word |= (((uint32_t)SOIL_STATUS_READ_ERROR) << SOIL_STATUS_BIT_SHIFT);
             break;
     }
-
-    cJSON_AddStringToObject(root, "SOIL-STATUS", soil_status_str);
 }
 
-void add_water_level(cJSON* root, Water_Level water_level) {
-    char* water_level_str;
-
+void add_water_level(uint32_t comm_word, Water_Level water_level) {
     switch (water_level) {
         case WATER_FULL:
-            water_level_str = "WATER_FULL";
+            comm_word |= (((uint32_t)WATER_FULL) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_MID:
-            water_level_str = "WATER_MID";
+            comm_word |= (((uint32_t)WATER_MID) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_LOW:
-            water_level_str = "WATER_LOW";
+            comm_word |= (((uint32_t)WATER_LOW) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_EMPTY:
-            water_level_str = "WATER_EMPTY";
+            comm_word |= (((uint32_t)WATER_EMPTY) << WATER_LEVEL_BIT_SHIFT);
             break;
         default:
-            water_level_str = "ERROR";
+            comm_word |= (((uint32_t) WATER_LEVEL_READ_ERROR) << WATER_LEVEL_BIT_SHIFT);
             break;
     }
-
-    cJSON_AddStringToObject(root, "WATER-LEVEL", water_level_str);
 }
 
-void add_valve_status(cJSON* root, Valve_Status valve_status) {
-    char* valve_status_str;
-
+void add_valve_status(uint32_t comm_word, Valve_Status valve_status) {
     switch (valve_status) {
         case VALVE_CLOSED:
-            valve_status_str = "VALVE_CLOSED";
+            comm_word |= (((uint32_t)VALVE_CLOSED) << VALVE_STATUS_BIT_SHIFT);
             break;
         case VALVE_OPEN:
-            valve_status_str = "VALVE_OPEN";
+            comm_word |= (((uint32_t)VALVE_OPEN) << VALVE_STATUS_BIT_SHIFT);
             break;
         default:
-            valve_status_str = "ERROR";
+            comm_word |= (((uint32_t)VALVE_STATUS_READ_ERROR) << VALVE_STATUS_BIT_SHIFT);
             break;
     }
+}
 
-    cJSON_AddStringToObject(root, "VALVE-STATUS", valve_status_str);
+void add_success_bit(uint32_t comm_word, uint8_t success_bit) {
+    comm_word |= (((uint32_t)success_bit) << SUCCESS_BIT_BIT_SHIFT);
 }
