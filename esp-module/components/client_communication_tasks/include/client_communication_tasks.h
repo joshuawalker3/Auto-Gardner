@@ -23,16 +23,16 @@
 
 void client_communication_tasks_client_socket_task(void* args);
 
-void add_temp(uint32_t comm_word, int16_t temp);
+void add_temp(uint32_t* comm_word, int16_t temp);
 
-void add_humidity(uint32_t comm_word, uint8_t humidity);
+void add_humidity(uint32_t* comm_word, uint8_t humidity);
 
-void add_soil_status(uint32_t comm_word, Soil_Status soil_status);
+void add_soil_status(uint32_t* comm_word, Soil_Status soil_status);
 
-void add_water_level(uint32_t comm_word, Water_Level water_level);
+void add_water_level(uint32_t* comm_word, Water_Level water_level);
 
-void add_valve_status(uint32_t comm_word, Valve_Status valve_status);
+void add_valve_status(uint32_t* comm_word, Valve_Status valve_status);
 
-void add_success_bit(uint32_t comm_word, uint8_t success_bit);
+void add_success_bit(uint32_t* comm_word, uint8_t success_bit);
 
 #endif

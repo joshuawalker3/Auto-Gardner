@@ -53,36 +53,36 @@ void client_communication_tasks_client_socket_task(void* args) {
 
         switch (cmd) {
             case GET_ALL_DATA:
-                add_temp(comm_word, msg_in.temperature);
-                add_humidity(comm_word, msg_in.humidity);
-                add_soil_status(comm_word, msg_in.soil_status);
-                add_water_level(comm_word, msg_in.water_level);
-                add_valve_status(comm_word, msg_in.valve_status);
+                add_temp(&comm_word, msg_in.temperature);
+                add_humidity(&comm_word, msg_in.humidity);
+                add_soil_status(&comm_word, msg_in.soil_status);
+                add_water_level(&comm_word, msg_in.water_level);
+                add_valve_status(&comm_word, msg_in.valve_status);
                 break;
             case GET_ENV_DATA:
-                add_temp(comm_word, msg_in.temperature);
-                add_humidity(comm_word, msg_in.humidity);
+                add_temp(&comm_word, msg_in.temperature);
+                add_humidity(&comm_word, msg_in.humidity);
                 break;
             case GET_SOIL_DATA:
-                add_soil_status(comm_word, msg_in.soil_status);
+                add_soil_status(&comm_word, msg_in.soil_status);
                 break;
             case GET_VALVE_STATUS:
-                add_valve_status(comm_word, msg_in.valve_status);
+                add_valve_status(&comm_word, msg_in.valve_status);
                 break;
             case GET_WATER_LEVEL:
-                add_water_level(comm_word, msg_in.water_level);
+                add_water_level(&comm_word, msg_in.water_level);
                 break;
             case GET_WATERING_STATUS:
-                add_water_level(comm_word, msg_in.water_level);
-                add_valve_status(comm_word, msg_in.valve_status);
+                add_water_level(&comm_word, msg_in.water_level);
+                add_valve_status(&comm_word, msg_in.valve_status);
                 break;
             case START_WATERING:
-                add_water_level(comm_word, msg_in.water_level);
-                add_valve_status(comm_word, msg_in.valve_status);
+                add_water_level(&comm_word, msg_in.water_level);
+                add_valve_status(&comm_word, msg_in.valve_status);
                 break;
             case STOP_WATERING:
-                add_water_level(comm_word, msg_in.water_level);
-                add_valve_status(comm_word, msg_in.valve_status);
+                add_water_level(&comm_word, msg_in.water_level);
+                add_valve_status(&comm_word, msg_in.valve_status);
                 break;
             case STM32_ERROR:
                 success_bit = TRANSMISSION_ERROR;
@@ -92,7 +92,7 @@ void client_communication_tasks_client_socket_task(void* args) {
                 break;
         }
 
-        add_success_bit(comm_word, success_bit);
+        add_success_bit(&comm_word, success_bit);
 
         char payload[33];
 
@@ -107,65 +107,65 @@ void client_communication_tasks_client_socket_task(void* args) {
     vTaskDelete(NULL);
 }
 
-void add_temp(uint32_t comm_word, int16_t temp) {
-    comm_word |= temp;
+void add_temp(uint32_t* comm_word, int16_t temp) {
+    *comm_word |= temp;
 }
 
-void add_humidity(uint32_t comm_word, uint8_t humidity) {
-    comm_word |= (((uint32_t)humidity) << HUMIDITY_BIT_SHIFT);
+void add_humidity(uint32_t* comm_word, uint8_t humidity) {
+    *comm_word |= (((uint32_t)humidity) << HUMIDITY_BIT_SHIFT);
 }
 
-void add_soil_status(uint32_t comm_word, Soil_Status soil_status) {
+void add_soil_status(uint32_t* comm_word, Soil_Status soil_status) {
     switch (soil_status) {
         case SOIL_SATURATED:
-            comm_word |= (((uint32_t)SOIL_SATURATED) << SOIL_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)SOIL_SATURATED) << SOIL_STATUS_BIT_SHIFT);
             break;
         case SOIL_OK:
-            comm_word |= (((uint32_t)SOIL_OK) << SOIL_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)SOIL_OK) << SOIL_STATUS_BIT_SHIFT);
             break;
         case SOIL_DRY:
-            comm_word |= (((uint32_t)SOIL_DRY) << SOIL_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)SOIL_DRY) << SOIL_STATUS_BIT_SHIFT);
             break;
         default:
-            comm_word |= (((uint32_t)SOIL_STATUS_READ_ERROR) << SOIL_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)SOIL_STATUS_READ_ERROR) << SOIL_STATUS_BIT_SHIFT);
             break;
     }
 }
 
-void add_water_level(uint32_t comm_word, Water_Level water_level) {
+void add_water_level(uint32_t* comm_word, Water_Level water_level) {
     switch (water_level) {
         case WATER_FULL:
-            comm_word |= (((uint32_t)WATER_FULL) << WATER_LEVEL_BIT_SHIFT);
+            *comm_word |= (((uint32_t)WATER_FULL) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_MID:
-            comm_word |= (((uint32_t)WATER_MID) << WATER_LEVEL_BIT_SHIFT);
+            *comm_word |= (((uint32_t)WATER_MID) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_LOW:
-            comm_word |= (((uint32_t)WATER_LOW) << WATER_LEVEL_BIT_SHIFT);
+            *comm_word |= (((uint32_t)WATER_LOW) << WATER_LEVEL_BIT_SHIFT);
             break;
         case WATER_EMPTY:
-            comm_word |= (((uint32_t)WATER_EMPTY) << WATER_LEVEL_BIT_SHIFT);
+            *comm_word |= (((uint32_t)WATER_EMPTY) << WATER_LEVEL_BIT_SHIFT);
             break;
         default:
-            comm_word |= (((uint32_t) WATER_LEVEL_READ_ERROR) << WATER_LEVEL_BIT_SHIFT);
+            *comm_word |= (((uint32_t) WATER_LEVEL_READ_ERROR) << WATER_LEVEL_BIT_SHIFT);
             break;
     }
 }
 
-void add_valve_status(uint32_t comm_word, Valve_Status valve_status) {
+void add_valve_status(uint32_t* comm_word, Valve_Status valve_status) {
     switch (valve_status) {
         case VALVE_CLOSED:
-            comm_word |= (((uint32_t)VALVE_CLOSED) << VALVE_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)VALVE_CLOSED) << VALVE_STATUS_BIT_SHIFT);
             break;
         case VALVE_OPEN:
-            comm_word |= (((uint32_t)VALVE_OPEN) << VALVE_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)VALVE_OPEN) << VALVE_STATUS_BIT_SHIFT);
             break;
         default:
-            comm_word |= (((uint32_t)VALVE_STATUS_READ_ERROR) << VALVE_STATUS_BIT_SHIFT);
+            *comm_word |= (((uint32_t)VALVE_STATUS_READ_ERROR) << VALVE_STATUS_BIT_SHIFT);
             break;
     }
 }
 
-void add_success_bit(uint32_t comm_word, uint8_t success_bit) {
-    comm_word |= (((uint32_t)success_bit) << SUCCESS_BIT_BIT_SHIFT);
+void add_success_bit(uint32_t* comm_word, uint8_t success_bit) {
+    *comm_word |= (((uint32_t)success_bit) << SUCCESS_BIT_BIT_SHIFT);
 }
