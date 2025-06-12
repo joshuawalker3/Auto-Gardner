@@ -9,4 +9,14 @@
 
 void spi_communication_tasks_stm32_task(void* args);
 
+void get_temp(Client_Spi_Message* msg_out);
+
+void get_humidity(Client_Spi_Message* msg_out);
+
+void get_soil_status(Client_Spi_Message* msg_out);
+
+void get_water_level(Client_Spi_Message* msg_out);
+
+void get_valve_status(Client_Spi_Message* msg_out);
+
 #endif
