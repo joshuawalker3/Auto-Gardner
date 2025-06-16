@@ -67,6 +67,7 @@ FloatSensors_HandleTypeDef float_sensors;
 Data_HandleTypeDef sensor_data;
 Sensors_HandleTypeDef sensors;
 uint8_t sys_flags = DEFAULT_SYS_FLAGS;
+Stm32State_TypeDef stm32_state;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,6 +124,8 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  state_machine_init(&stm32_state);
+
   if (Initialize_AHT10() != HAL_OK) {
 	  // Show error somehow
   }
@@ -146,6 +149,8 @@ int main(void)
   if (Initialize_Esp32Module() != HAL_OK) {
 	  // Show error somehow
   }
+
+  state_machine_update_state(&stm32_state, STM32_IDLE);
 
   /* USER CODE END 2 */
 

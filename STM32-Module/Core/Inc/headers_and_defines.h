@@ -15,6 +15,7 @@
 #include "solenoid.h"
 #include "esp32_spi_driver.h"
 #include "sensor_tasks.h"
+#include "state_machine.h"
 
 #define OS_MODE NO_RTOS
 #define AHT10_DEFAULT_UNITS IMPERIAL
