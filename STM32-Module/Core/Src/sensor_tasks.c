@@ -6,17 +6,17 @@
  */
 #include "sensor_tasks.h"
 
-osThreadId_t envDataTaskHandle;
-osThreadId_t levelDataTaskHandle;
+osThreadId_t i2cDataTaskHandle;
+osThreadId_t gpioDataTaskHandle;
 
-const osThreadAttr_t envDataTask_attributes = {
-  .name = "envDataTask",
+const osThreadAttr_t i2cDataTask_attributes = {
+  .name = "i2cDataTask",
   .stack_size = configMINIMAL_STACK_SIZE * ENV_DATA_TASK_STACK_NUM,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
-const osThreadAttr_t levelDataTask_attributes = {
-  .name = "levelDataTask",
+const osThreadAttr_t gpioDataTask_attributes = {
+  .name = "gpioDataTask",
   .stack_size = configMINIMAL_STACK_SIZE * LEVEL_DATA_TASK_STACK_NUM,
   .priority = (osPriority_t) osPriorityNormal,
 };
