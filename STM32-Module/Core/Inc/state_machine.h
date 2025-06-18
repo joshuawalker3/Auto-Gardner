@@ -8,6 +8,8 @@
 #ifndef INC_STATE_MACHINE_H_
 #define INC_STATE_MACHINE_H_
 
+#include "main.h"
+
 typedef enum {
 	STM32_IDLE,
 	STM32_MEASURE,
@@ -21,5 +23,6 @@ typedef struct {
 
 void state_machine_init(Stm32State_TypeDef* stm32_state);
 void state_machine_update_state(Stm32State_TypeDef* stm32_state, StateMachine_Enum new_state);
+void state_machine_spi_interrupt(Stm32State_TypeDef* stm32_state, uint8_t* sys_flags);
 
 #endif /* INC_STATE_MACHINE_H_ */

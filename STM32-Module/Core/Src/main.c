@@ -513,18 +513,8 @@ HAL_StatusTypeDef Initialize_SensorTasks(void) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	switch (GPIO_Pin) {
 		case SPI1_CS_Pin:
-			switch (stm32_state.stm32_state) {
-				case STM32_IDLE:
-					break;
-				case STM32_MEASURE:
-					break;
-				case STM32_DATA_READY:
-					break;
-				case STM32_INIT:
-					break;
-				default:
-					break;
-			}
+			void state_machine_spi_interrupt(Stm32State_TypeDef* stm32_state, uint8_t* sys_flags);
+			break;
 		default:
 			break;
 	}
