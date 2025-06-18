@@ -62,11 +62,9 @@ FloatSensor_HandleTypeDef low_float_sensor;
 SoilMoistSensor_HandleTypeDef soil_moisture_sensor;
 Solenoid_HandleTypeDef water_valve;
 Esp32_SpiHandle esp32_module;
-EnvSensors_HandleTypeDef env_sensors;
-FloatSensors_HandleTypeDef float_sensors;
-Data_HandleTypeDef sensor_data;
-Sensors_HandleTypeDef sensors;
-uint8_t sys_flags = DEFAULT_SYS_FLAGS;
+I2cSensors_HandleTypeDef i2c_sensors;
+GpioSensors_HandleTypeDef gpio_sensors;
+uint8_t sys_flags = 0x00;
 Stm32State_TypeDef stm32_state;
 /* USER CODE END PV */
 
@@ -179,6 +177,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  //i2cDataTaskHandle = osThreadNew(sensor_tasks_get_i2c_data, (void*)&i2c_sensors, &)
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -491,24 +490,22 @@ HAL_StatusTypeDef Initialize_Esp32Module(void) {
 }
 
 HAL_StatusTypeDef Initialize_SensorTasks(void) {
-	HAL_StatusTypeDef status = sensor_tasks_init_i2c_Sensors(&env_sensors, &aht10, &soil_moisture_sensor);
+	HAL_StatusTypeDef status = sensor_tasks_init_i2c_Sensors(&i2c_sensors, &aht10, &soil_moisture_sensor, &sys_flags);
 
 	if (status != HAL_OK) {
 		return status;
 	}
 
-	status = sensor_tasks_init_float_sensors(&float_sensors, &hi_float_sensor, &mid_float_sensor, &low_float_sensor);
+	status = sensor_tasks_init_gpio_sensors(&gpio_sensors,
+			&hi_float_sensor,
+			&mid_float_sensor,
+			&low_float_sensor,
+			&water_valve,
+			&sys_flags);
 
 	if (status != HAL_OK) {
 		return status;
 	}
-
-	sensor_data.temp = DEFAULT_TEMP;
-	sensor_data.humidity = DEFAULT_HUMIDITY;
-	sensor_data.soil_status = DEFAULT_SOIL_STATUS;
-	sensor_data.water_level = DEFAULT_WATER_LEVEL;
-
-	status = sensor_tasks_init(&sensors, &sys_flags, &env_sensors, &float_sensors, &sensor_data);
 
 	return status;
 }
@@ -516,7 +513,7 @@ HAL_StatusTypeDef Initialize_SensorTasks(void) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	switch (GPIO_Pin) {
 		case SPI1_CS_Pin:
-			switch (stm32_state->stm32_state) {
+			switch (stm32_state.stm32_state) {
 				case STM32_IDLE:
 					break;
 				case STM32_MEASURE:
@@ -544,6 +541,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+	sensor_tasks_start_all_tasks(&i2c_sensors, &gpio_sensors);
   /* Infinite loop */
   for(;;)
   {

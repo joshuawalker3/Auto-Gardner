@@ -18,8 +18,8 @@
 #define TEMP_HUMID_FLAG (1 << 0)
 #define LEVEL_FLAG (1 << 1)
 #define SOIL_MOISTURE_FLAG (1 << 2)
-#define ENV_DATA_TASK_STACK_NUM 4
-#define LEVEL_DATA_TASK_STACK_NUM 4
+#define I2C_DATA_TASK_STACK_NUM 4
+#define GPIO_DATA_TASK_STACK_NUM 4
 
 #define GET_ALL_DATA 0x01
 #define GET_ENV_DATA 0x02
@@ -52,43 +52,24 @@ typedef enum {
 	EMPTY
 } WaterLevel_Enum;
 
-typedef struct {
-	int16_t temp;
-	uint8_t humidity;
-	Solenoid_Status valve_status;
-	Soil_Status soil_status;
-	WaterLevel_Enum water_level;
-} Data_HandleTypeDef;
-
-typedef struct {
-	uint8_t* sys_flags;
-	I2cSensors_HandleTypeDef* i2c_sensors;
-	GpioSensors_HandleTypeDef* gpio_sensors;
-	Data_HandleTypeDef* data;
-} Sensors_HandleTypeDef;
-
-HAL_StatusTypeDef sensor_tasks_init_i2c_Sensors(EnvSensors_HandleTypeDef* env_sensors,
+HAL_StatusTypeDef sensor_tasks_init_i2c_Sensors(I2cSensors_HandleTypeDef* i2c_sensors,
 		Aht10_HandleTypeDef* aht10,
-		SoilMoistSensor_HandleTypeDef* soil_moisture_sensor);
+		SoilMoistSensor_HandleTypeDef* soil_moisture_sensor,
+		uint8_t* flags);
 
-HAL_StatusTypeDef sensor_tasks_init_float_sensors(FloatSensors_HandleTypeDef* float_sensors,
+HAL_StatusTypeDef sensor_tasks_init_gpio_sensors(GpioSensors_HandleTypeDef* gpio_sensors,
 		FloatSensor_HandleTypeDef* hi_float_sensor,
 		FloatSensor_HandleTypeDef* mid_float_sensor,
-		FloatSensor_HandleTypeDef* low_float_sensor);
+		FloatSensor_HandleTypeDef* low_float_sensor,
+		Solenoid_HandleTypeDef* water_valve,
+		uint8_t* flags);
 
-HAL_StatusTypeDef sensor_tasks_init(Sensors_HandleTypeDef* sensors,
-		uint8_t* flags,
-		EnvSensors_HandleTypeDef* env_sensors,
-		FloatSensors_HandleTypeDef* float_sensors,
-		Data_HandleTypeDef* data);
+void sensor_tasks_get_i2c_data(void* i2c_sensors_args);
 
+void sensor_tasks_get_gpio_data(void* gpio_sensors_args);
 
-
-void sensor_tasks_get_env_data(void* env_sensors_args);
-
-void sensor_tasks_get_level_data(void* float_sensors_args);
-
-void sensor_tasks_get_all_data(void* sensors_args);
+HAL_StatusTypeDef sensor_tasks_start_all_tasks(I2cSensors_HandleTypeDef* i2c_sensors_args,
+		GpioSensors_HandleTypeDef* gpio_sensors_args);
 
 
 #endif /* INC_SENSOR_TASKS_H_ */
